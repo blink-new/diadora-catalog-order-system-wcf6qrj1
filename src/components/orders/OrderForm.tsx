@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { CalendarIcon, Download, FileText } from 'lucide-react'
 import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
-import { blink } from '@/blink/client'
+import blink from '@/blink/client'
 import { CartItem, Customer, Order } from '@/types'
 
 interface OrderFormProps {
@@ -55,25 +55,25 @@ export function OrderForm({ cartItems, customer, onOrderComplete }: OrderFormPro
         customerId: customer.id,
         userId: user.id,
         orderNumber,
-        orderDate: new Date().toISOString(),
-        deliveryDate: deliveryDate.toISOString(),
-        specialInstructions,
-        signature,
-        status: 'pending',
+        orderDate: new Date().toISOString().split('T')[0], // Date only
+        deliveryMonth: format(deliveryDate, 'MMMM yyyy'),
         totalAmount: calculateTotal(),
-        createdAt: new Date().toISOString()
+        status: 'pending'
       })
 
       // Create order items
       for (const item of cartItems) {
-        await blink.db.order_items.create({
+        const itemId = `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        await blink.db.orderItems.create({
+          id: itemId,
           orderId: orderNumber,
           productId: item.productId,
           size: item.size,
           color: item.color,
           quantity: item.quantity,
           unitPrice: item.price,
-          totalPrice: item.price * item.quantity
+          lineTotal: item.price * item.quantity,
+          userId: user.id
         })
       }
 

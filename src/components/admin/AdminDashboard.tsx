@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { Upload, Download, Package, Users, ShoppingCart, TrendingUp } from 'lucide-react'
-import { blink } from '@/blink/client'
+import blink from '@/blink/client'
 import { Product, Stock, Order, Customer } from '@/types'
 
 export function AdminDashboard() {
