@@ -27,7 +27,7 @@ export function CartSidebar({
   }
 
   const getTotalAmount = () => {
-    return cartItems.reduce((sum, item) => sum + item.lineTotal, 0)
+    return cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
   }
 
   return (
@@ -56,7 +56,7 @@ export function CartSidebar({
                 <div key={index} className="border rounded-lg p-4">
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex-1">
-                      <h4 className="font-medium text-slate-900">{item.productName}</h4>
+                      <h4 className="font-medium text-slate-900">{item.name}</h4>
                       <p className="text-sm text-slate-600">Style: {item.styleCode}</p>
                       <div className="flex items-center gap-2 mt-1">
                         <Badge variant="outline" className="text-xs">
@@ -104,10 +104,10 @@ export function CartSidebar({
                     </div>
                     <div className="text-right">
                       <p className="text-sm text-slate-600">
-                        ${item.unitPrice.toFixed(2)} each
+                        ${item.price.toFixed(2)} each
                       </p>
                       <p className="font-bold text-slate-900">
-                        ${item.lineTotal.toFixed(2)}
+                        ${(item.price * item.quantity).toFixed(2)}
                       </p>
                     </div>
                   </div>

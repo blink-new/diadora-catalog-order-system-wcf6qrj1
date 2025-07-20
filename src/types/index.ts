@@ -40,10 +40,12 @@ export interface Order {
   orderNumber: string
   customerId: string
   orderDate: string
-  deliveryMonth: string
+  deliveryDate?: string
+  deliveryMonth?: string
   totalAmount: number
   status: 'pending' | 'confirmed' | 'shipped' | 'delivered'
   signature?: string
+  specialInstructions?: string
   userId: string
   createdAt: string
 }
@@ -62,13 +64,12 @@ export interface OrderItem {
 
 export interface CartItem {
   productId: string
-  productName: string
+  name: string
   styleCode: string
   color: string
   size: string
   quantity: number
-  unitPrice: number
-  lineTotal: number
+  price: number
 }
 
 export interface StockLevel {

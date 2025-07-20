@@ -3,12 +3,14 @@ import { Header } from '@/components/layout/Header'
 import { CustomerInfoForm } from '@/components/forms/CustomerInfoForm'
 import { ProductCatalog } from '@/components/catalog/ProductCatalog'
 import { CartSidebar } from '@/components/cart/CartSidebar'
+import { OrderForm } from '@/components/orders/OrderForm'
+import { AdminDashboard } from '@/components/admin/AdminDashboard'
 import { Toaster } from '@/components/ui/toaster'
 import { useToast } from '@/hooks/use-toast'
 import blink from '@/blink/client'
 import { Customer, Product, StockLevel, CartItem } from '@/types'
 
-type AppStep = 'customer-info' | 'catalog' | 'order-form'
+type AppStep = 'customer-info' | 'catalog' | 'order-form' | 'admin'
 
 function App() {
   const [currentStep, setCurrentStep] = useState<AppStep>('customer-info')
@@ -235,8 +237,7 @@ function App() {
         const updated = [...prev]
         updated[existingIndex] = {
           ...updated[existingIndex],
-          quantity: updated[existingIndex].quantity + item.quantity,
-          lineTotal: (updated[existingIndex].quantity + item.quantity) * item.unitPrice
+          quantity: updated[existingIndex].quantity + item.quantity
         }
         return updated
       } else {
@@ -246,7 +247,7 @@ function App() {
 
     toast({
       title: "Added to cart",
-      description: `${item.quantity}x ${item.productName} (${item.color}, Size ${item.size})`
+      description: `${item.quantity}x ${item.name} (${item.color}, Size ${item.size})`
     })
   }
 
@@ -263,8 +264,7 @@ function App() {
       const updated = [...prev]
       updated[index] = {
         ...updated[index],
-        quantity,
-        lineTotal: quantity * updated[index].unitPrice
+        quantity
       }
       return updated
     })
@@ -302,12 +302,8 @@ function App() {
       <Header
         cartItemCount={cartItems.length}
         onCartClick={() => setIsCartOpen(true)}
-        onUploadClick={() => {
-          toast({
-            title: "Upload Stock Data",
-            description: "Excel upload feature coming soon"
-          })
-        }}
+        onUploadClick={() => setCurrentStep('admin')}
+        onAdminClick={() => setCurrentStep('admin')}
       />
 
       <main className="pb-8">
@@ -326,9 +322,30 @@ function App() {
         )}
 
         {currentStep === 'order-form' && (
-          <div className="py-12 text-center">
-            <h1 className="text-3xl font-bold text-slate-900 mb-4">Order Form</h1>
-            <p className="text-slate-600">Order form functionality coming soon...</p>
+          <div className="py-12">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <OrderForm
+                cartItems={cartItems}
+                customer={customer}
+                onOrderComplete={(orderId) => {
+                  toast({
+                    title: "Order submitted successfully!",
+                    description: `Order ${orderId} has been created`
+                  })
+                  setCartItems([])
+                  setCurrentStep('catalog')
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        {currentStep === 'admin' && (
+          <div className="py-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h1 className="text-3xl font-bold text-slate-900 mb-8">Admin Dashboard</h1>
+              <AdminDashboard />
+            </div>
           </div>
         )}
       </main>

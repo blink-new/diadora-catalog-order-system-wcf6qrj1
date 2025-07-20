@@ -59,13 +59,12 @@ export function ProductCard({ product, stockLevels, onAddToCart }: ProductCardPr
       if (quantity > 0) {
         const item: CartItem = {
           productId: product.id,
-          productName: product.name,
+          name: product.name,
           styleCode: product.styleCode,
           color: selectedColor,
           size,
           quantity,
-          unitPrice: product.listPrice,
-          lineTotal: quantity * product.listPrice
+          price: product.listPrice
         }
         onAddToCart(item)
       }

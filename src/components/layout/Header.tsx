@@ -1,14 +1,15 @@
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ShoppingCart, User, Upload } from 'lucide-react'
+import { ShoppingCart, User, Upload, Settings } from 'lucide-react'
 
 interface HeaderProps {
   cartItemCount: number
   onCartClick: () => void
   onUploadClick: () => void
+  onAdminClick?: () => void
 }
 
-export function Header({ cartItemCount, onCartClick, onUploadClick }: HeaderProps) {
+export function Header({ cartItemCount, onCartClick, onUploadClick, onAdminClick }: HeaderProps) {
   return (
     <header className="bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -32,6 +33,18 @@ export function Header({ cartItemCount, onCartClick, onUploadClick }: HeaderProp
               <Upload className="h-4 w-4 mr-2" />
               Upload Stock
             </Button>
+
+            {onAdminClick && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onAdminClick}
+                className="hidden sm:flex"
+              >
+                <Settings className="h-4 w-4 mr-2" />
+                Admin
+              </Button>
+            )}
             
             <Button
               variant="outline"
